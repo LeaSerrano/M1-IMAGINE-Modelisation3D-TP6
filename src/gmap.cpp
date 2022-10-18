@@ -94,6 +94,10 @@ bool GMap::is_valid() const
             return false;
         }
 
+        if (alpha({2, 2}, dart) != dart) {
+            return false;
+        }
+
         if (alpha({0, 2, 0, 2}, dart) != dart) {
             return false;
         }
@@ -110,6 +114,24 @@ bool GMap::is_valid() const
 */
 GMap::idlist_t GMap::orbit(const degreelist_t& alphas, id_t dart) const
 {
+
+    idlist_t result;
+    idset_t marked;
+    idlist_t toprocess = {dart};
+    
+    while(!toprocess.empty()) {
+        id_t d = toprocess.front();
+        toprocess.erase(toprocess.begin());
+        if (marked.count(d) == 0) {
+            result.push_back(d);
+            marked.insert(d);
+            for (degree_t degree : alphas ) {
+                toprocess.push_back(alpha(degree, d));
+            }
+        }
+    }
+
+    return result;
 }
 
 /*
