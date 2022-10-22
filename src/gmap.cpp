@@ -168,7 +168,36 @@ GMap::idlist_t GMap::orderedorbit(const degreelist_t& list_of_alpha_value, id_t 
 */
 bool GMap::sew_dart(degree_t degree, id_t dart1, id_t dart2)
 {
-    return false;
+    idlist_t orbitDart1;
+    idlist_t orbitDart2;
+
+    if (degree == 1) {
+        link_darts(1, dart1, dart2);
+    }
+    else {
+        if (degree == 0) {
+            orbitDart1 = orbit({2}, dart1);
+            orbitDart2 = orbit({2}, dart2);
+        }  
+        else if (degree == 2) {
+            orbitDart1 = orbit({0}, dart1);
+            orbitDart2 = orbit({0}, dart2);
+        } 
+        
+        if (orbitDart1.size() != orbitDart2.size()) {
+            return false;
+        } 
+
+        for (id_t id = 0 ; id < orbitDart1.size(); id++) { 
+            link_darts(0, orbitDart1.at(id), orbitDart2.at(id));
+            link_darts(0, orbitDart2.at(id), orbitDart1.at(id));
+            link_darts(2, orbitDart1.at(id), orbitDart2.at(id));
+            link_darts(2, orbitDart2.at(id), orbitDart1.at(id));
+        }
+
+    } 
+
+    return true;
 }
 
 // Compute the Euler-Poincare characteristic of the subdivision
