@@ -1,3 +1,5 @@
+#include <iostream>
+#include <ostream>
 // #include "gmap.hpp"
 #ifdef GMAP_CORE
 #include <algorithm>
@@ -152,7 +154,6 @@ GMap::idlist_t GMap::orderedorbit(const degreelist_t& list_of_alpha_value, id_t 
         degree_t next = list_of_alpha_value[current_alpha_index];
         current_alpha_index++;
         current_dart = next;
-        
     }
 
     return result;
@@ -186,12 +187,15 @@ int GMap::eulercharacteristic() const
     return the dart passed as argument.
 */
 
-
-
 template<class T>
 GMap::id_t EmbeddedGMap<T>::get_embedding_dart(id_t dart) const
 {
-    // TOCOMPLETE
+    for (auto [key, item] : properties) {
+        if (dart == key){
+            return key;
+        } 
+    } 
+    
     return dart;
 }
 

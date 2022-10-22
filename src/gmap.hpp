@@ -146,7 +146,7 @@ public:
         associated with a value in propertydict. If yes, return this dart, else
         return the dart passed as argument.
     */
-    id_t get_embedding_dart(id_t dart) const ;
+    id_t get_embedding_dart(id_t dart) const;
 
 
 
