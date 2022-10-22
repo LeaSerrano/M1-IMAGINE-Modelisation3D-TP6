@@ -142,6 +142,20 @@ GMap::idlist_t GMap::orbit(const degreelist_t& alphas, id_t dart) const
 */
 GMap::idlist_t GMap::orderedorbit(const degreelist_t& list_of_alpha_value, id_t dart) const
 {
+    idlist_t result;
+    id_t current_dart = dart;
+    unsigned char current_alpha_index = 0;
+    size_t n_alpha = list_of_alpha_value.size();
+
+    while (current_dart != dart) {
+        result.push_back(current_dart);
+        degree_t next = list_of_alpha_value[current_alpha_index];
+        current_alpha_index++;
+        current_dart = next;
+        
+    }
+
+    return result;
 }
 
 
