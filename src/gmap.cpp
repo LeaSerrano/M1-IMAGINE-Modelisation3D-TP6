@@ -203,7 +203,7 @@ bool GMap::sew_dart(degree_t degree, id_t dart1, id_t dart2)
 // Compute the Euler-Poincare characteristic of the subdivision
 int GMap::eulercharacteristic() const
 {
-    return 0;
+    return this->elements(0).size() - this->elements(1).size() + this->elements(2).size();
 }
 
 #endif
