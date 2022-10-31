@@ -161,6 +161,8 @@ int display(const  GMap3D& gmap)
         vhandler[i] = gmap.get_embedding_dart( vhandler[i] );
         vertex_index[vhandler[i]] = indexed_vertices.size();
         indexed_vertices.push_back( gmap.get_position( vhandler[i] ) );
+
+        std::cout << vertex_index[vhandler[i]] << std::endl;
     }
 
     GMap::idlist_t fdarts = gmap.elements(2);
@@ -180,6 +182,13 @@ int display(const  GMap3D& gmap)
                 indices.push_back(findices[0]);
                 indices.push_back(*itI);
                 indices.push_back(*(itI+1));
+
+                /*indices.push_back(0);
+                indices.push_back(5);
+                indices.push_back(2);*/
+
+
+                //std::cout << indices[0] << indices[1] << indices[2] << std::endl;
             }
 
         }
@@ -195,22 +204,23 @@ int display(const  GMap3D& gmap)
         Tp.push_back( indices[i+2] );
         triangles.push_back(Tp);
     }
+
     compute_smooth_vertex_normals(0, indexed_normals, indexed_vertices, triangles);
 
     // for the property, you can first use a random value for each vertices.
     property.resize(indexed_vertices.size(), static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
 
-    for( unsigned int i = 0 ; i < indexed_vertices.size() ; i++ ){
+    /*for( unsigned int i = 0 ; i < indexed_vertices.size() ; i++ ){
         printf("%i:%f %f %f \n",i, indexed_vertices[i][0],indexed_vertices[i][1],indexed_vertices[i][2]);
-    }
+    }*/
 
     for( unsigned int i = 0 ; i < indices.size()/3 ; i++ ){
         printf("%i:%i %i %i \n",i, indices[3*i],indices[3*i+1],indices[3*i+2]);
     }
 
-    for( unsigned int i = 0 ; i < indexed_normals.size() ; i++ ){
+    /*for( unsigned int i = 0 ; i < indexed_normals.size() ; i++ ){
         printf("%i:%f %f %f \n",i, indexed_normals[i][0],indexed_normals[i][1],indexed_normals[i][2]);
-    }
+    }*/
 
     glm::vec3 bb_min( FLT_MAX, FLT_MAX, FLT_MAX );
     glm::vec3 bb_max( FLT_MIN, FLT_MIN, FLT_MIN );
@@ -371,4 +381,3 @@ int display(const  GMap3D& gmap)
 
     return 0;
 }
-

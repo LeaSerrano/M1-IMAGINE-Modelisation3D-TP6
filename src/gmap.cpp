@@ -1,6 +1,6 @@
 #include <iostream>
 #include <ostream>
-// #include "gmap.hpp"
+//#include "gmap.hpp"
 #ifdef GMAP_CORE
 #include <algorithm>
 /*------------------------------------------------------------------------*/
@@ -146,14 +146,13 @@ GMap::idlist_t GMap::orderedorbit(const degreelist_t& list_of_alpha_value, id_t 
 {
     idlist_t result;
     id_t current_dart = dart;
-    unsigned char current_alpha_index = 0;
+    unsigned char current_index = 0;
     size_t n_alpha = list_of_alpha_value.size();
 
-    while (current_dart != dart) {
+    while (current_dart != dart || result.size() == 0) {
         result.push_back(current_dart);
-        degree_t next = list_of_alpha_value[current_alpha_index];
-        current_alpha_index++;
-        current_dart = next;
+        current_dart = alpha(list_of_alpha_value[current_index], current_dart);
+        current_index = (current_index + 1) % n_alpha;
     }
 
     return result;
@@ -189,15 +188,14 @@ bool GMap::sew_dart(degree_t degree, id_t dart1, id_t dart2)
         } 
 
         for (id_t id = 0 ; id < orbitDart1.size(); id++) { 
-            link_darts(0, orbitDart1.at(id), orbitDart2.at(id));
-            link_darts(0, orbitDart2.at(id), orbitDart1.at(id));
-            link_darts(2, orbitDart1.at(id), orbitDart2.at(id));
-            link_darts(2, orbitDart2.at(id), orbitDart1.at(id));
+            link_darts(degree, orbitDart1.at(id), orbitDart2.at(id));
         }
 
     } 
 
     return true;
+
+    
 }
 
 // Compute the Euler-Poincare characteristic of the subdivision
@@ -216,14 +214,13 @@ int GMap::eulercharacteristic() const
     return the dart passed as argument.
 */
 
-template<class T>
-GMap::id_t EmbeddedGMap<T>::get_embedding_dart(id_t dart) const
+template<class T> GMap::id_t EmbeddedGMap<T>::get_embedding_dart(id_t dart) const
 {
-    for (auto [key, item] : properties) {
-        if (dart == key){
-            return key;
-        } 
-    } 
+    for (id_t brin : orbit({1, 2}, dart)) {
+        if (properties.count(brin) != 0) {
+            return brin;
+        }
+    }
     
     return dart;
 }
@@ -235,6 +232,19 @@ GMap::id_t EmbeddedGMap<T>::get_embedding_dart(id_t dart) const
 
 GMap3D GMap3D::dual()
 {
+    GMap3D dual_gmap;
+    dual_gmap.maxid = maxid;
+
+   for (id_t i = 0; i < this->alphas.size(); i++) {
+        dual_gmap.alphas.at(i) = alpha({2, 1, 0}, i);
+    }
+
+    for (id_t brin : this->elements(2)) {
+        dual_gmap.get_position(brin) = element_center(2, brin);
+    }
+
+    return dual_gmap;
+
 }
 
 
